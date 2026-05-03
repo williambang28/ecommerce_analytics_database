@@ -1,4 +1,4 @@
--- what is the most popular product?
+-- what products drive the most demand, and how concentrated is product performance?
 SELECT product_name, COUNT(quantity) AS "purchase_count" FROM products JOIN order_items
 ON products.product_id = order_items.product_id
 GROUP BY product_name
@@ -12,7 +12,7 @@ JOIN order_items ON orders.order_id = order_items.order_id
 WHERE (delivery_date::date - order_date::date) IS NOT NULL
 ORDER BY date_diff ASC;
 
--- what is the minimum, maximum, median, and average payment of all order? How does this compare to the quantity of items bought?
+-- how does order value scale with basket size, and are there signs of high-value outliers?
 SELECT quantity, TO_CHAR(MAX(amount), '£999G999G990D00') AS "max", TO_CHAR(MIN(amount), '£999G999G990D00') AS "min", TO_CHAR(ROUND(AVG(amount), 2), '£999G999G990D00') AS "average", TO_CHAR(ROUND(CAST(percentile_cont(0.5) WITHIN GROUP (ORDER BY amount) AS numeric), 2), '£999G999G990D00') AS "median"
 FROM payments 
 JOIN orders ON payments.order_id = orders.order_id
